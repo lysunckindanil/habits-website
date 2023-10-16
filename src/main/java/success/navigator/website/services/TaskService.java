@@ -20,7 +20,7 @@ public class TaskService {
         return taskRepository.findById(id).orElse(null);
     }
 
-    public void addTask(Task task) {
+    public void add(Task task) {
         taskRepository.save(task);
     }
 

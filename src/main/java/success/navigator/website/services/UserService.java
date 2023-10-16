@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import success.navigator.website.entities.Role;
+import success.navigator.website.entities.Task;
 import success.navigator.website.entities.User;
 import success.navigator.website.repositories.RoleRepository;
 import success.navigator.website.repositories.UserRepository;
@@ -62,5 +63,4 @@ public class UserService implements UserDetailsService {
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
     }
-
 }

@@ -2,9 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add task</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
 
+<main>
+    <form class="container my-5 px-4" method="post" th:object="${task}"
+          th:action="@{/tasks/{id}/edit (id=${task.getId()})}">
+        <h1 class="display-5 text-center">Edit task</h1>
+
+        <div class="form-group mb-3">
+            <label for="name">Name of task</label>
+            <input th:field="*{name}" type="text" class="form-control" id="name"
+                   placeholder="Enter name" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="description">Description</label>
+            <input th:field="*{description}" type="text" class="form-control" id="description"
+                   placeholder="Enter description">
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="image">Image url</label>
+            <input th:field="*{image}" type="text" class="form-control" id="image"
+                   placeholder="Enter image url" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="points">Points</label>
+            <input th:field="*{points}" type="number" class="form-control" id="points"
+                   placeholder="Enter points" required>
+        </div>
+
+        <div class="text-md-start text-center">
+            <button type="submit" class="btn btn-primary m-1">Edit task</button>
+        </div>
+
+        <div class="text-md-start text-center">
+            <form method="post" th:action="@{/tasks/{id}/delete (id=${task.getId()})}">
+                <button type="submit" class="btn btn-danger m-1">Delete task</button>
+            </form>
+        </div>
+    </form>
+</main>
+
+<script src="bootstrap-5.0.2-dist/js/bootstrap.js"></script>
 </body>
 </html>
