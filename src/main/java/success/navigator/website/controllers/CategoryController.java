@@ -52,7 +52,7 @@ public class CategoryController {
         original_category.setDescription(category.getDescription());
         original_category.setCategoryOrder(category.getCategoryOrder());
         categoryService.add(original_category);
-        return "redirect:/categories/" + category.getId() + "/edit";
+        return "redirect:/categories/%d/edit".formatted(category.getId());
     }
 
     @PostMapping("/{id}/delete")
