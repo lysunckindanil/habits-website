@@ -23,6 +23,7 @@ public class TaskController {
     private final UserService userService;
     private final CategoryService categoryService;
 
+    // secured (/tasks/add, /tasks/*/edit, /tasks/*/delete)
     @GetMapping()
     private String index(Model model, Principal principal) {
         if (principal != null) {
@@ -77,8 +78,8 @@ public class TaskController {
         return "redirect:/tasks";
     }
 
-    @PostMapping("/{id}/count")
-    private String addPointsToUser(@PathVariable Long id, Principal principal) {
+    @PostMapping("/count")
+    private String addPointsToUser(@RequestParam("task_id") Long id, Principal principal) {
         userService.addPointsToUser(principal.getName(), taskService.getTaskById(id).getPoints());
         return "redirect:/tasks";
     }

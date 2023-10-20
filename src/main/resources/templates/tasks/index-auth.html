@@ -35,22 +35,8 @@
             <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-2">
                 <div class="col" th:each="task : ${category.getTasks()}">
 
-                    <!--                    admin cards-->
-                    <a th:if="${isAdmin}" th:href="@{/tasks/{id}/edit (id=${task.getId()})}">
-                        <div class="card shadow-sm h-100">
-                            <img class="card-img-top" th:src="@{/images/{id} (id = ${task.getImage()})}"
-                                 th:alt="${task.getName()}">
-                            <div class="card-body">
-                                <h4 class="card-title" th:text="${task.getName()}"></h4>
-                                <p class="card-subtitle" th:text="${task.getDescription()}"></p>
-                                <p class="card-subtitle" th:text="${task.getPoints()} + ' points'"></p>
-
-                            </div>
-                        </div>
-                    </a>
-
                     <!--                    user cards-->
-                    <a th:if="${!isAdmin}">
+                    <a>
                         <div class="card shadow-sm h-100">
                             <img class="card-img-top" th:src="@{/images/{id} (id = ${task.getImage()})}"
                                  th:alt="${task.getName()}">
@@ -59,15 +45,16 @@
                                 <p class="card-subtitle" th:text="${task.getDescription()}"></p>
                                 <p style="color: red" class="card-subtitle"
                                    th:text="${task.getPoints()} + ' points'"></p>
-                                <form method="post"
-                                      th:action="@{/tasks/{id}/count (id=${task.getId()})}">
+                                <form method="post" th:action="@{/tasks/count}">
+                                    <label for="task_id" hidden="hidden">task id</label>
+                                    <input th:name="task_id" id="task_id" th:value="${task.getId()}" hidden="hidden">
+
                                     <button type="submit" class="btn btn-primary">Count
                                     </button>
                                 </form>
                             </div>
                         </div>
                     </a>
-
                 </div>
             </div>
         </div>

@@ -19,6 +19,7 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final TaskService taskService;
 
+    // everything secured (/categories)
     @GetMapping("/add")
     private String addCategoryForm(Model model) {
         model.addAttribute("category", new Category());

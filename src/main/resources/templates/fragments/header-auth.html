@@ -1,10 +1,15 @@
-<nav th:fragment="header(username, points)" class="navbar navbar-expand-lg navbar-dark bg-dark"
-     aria-label="Eighth navbar example">
+<nav th:fragment="header(username, points)" class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
-        <div class="collapse navbar-collapse" id="navbarsExample07">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li><a href="/" class="nav-link px-2 text-white">Home</a></li>
-                <li><a href="/tasks" class="nav-link px-2 text-white">Game</a></li>
+        <a class="navbar-brand" href="/">MrSuccessCucumber228</a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbarCollapse" style="">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li><a th:href="@{/}" class="nav-link px-2 text-white">Home</a></li>
+                <li><a th:href="@{/tasks}" class="nav-link px-2 text-white">Game</a></li>
                 <li><a href="#" class="nav-link px-2 text-white">About</a></li>
 
                 <li class="nav-item dropdown">
@@ -16,13 +21,11 @@
                     </ul>
                 </li>
             </ul>
-            <div class="text-end">
-                <form method="post" th:action="@{/logout}">
-                    <button type="submit" class="btn btn-secondary" th:text="${username} +', ' + ${points} + ' points'">
-                        Profile
-                    </button>
-                </form>
-            </div>
+            <form method="post" th:action="@{/logout}">
+                <button type="submit" class="btn btn-secondary" th:text="${username} +', ' + ${points} + ' points'">
+                    Profile
+                </button>
+            </form>
         </div>
     </div>
 </nav>

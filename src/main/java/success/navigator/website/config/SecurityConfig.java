@@ -22,7 +22,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/tasks/add", "tasks/*/edit").hasRole("ADMIN"))
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers(
+                        // admin
+                        "/admin",
+                        // categories
+                        "/categories",
+                        // tasks
+                        "/tasks/add", "/tasks/*/edit", "/tasks/*/delete",
+                        // images
+                        "/images/add", "/images/delete"
+                ).hasRole("ADMIN"))
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .httpBasic(withDefaults())
                 .formLogin(form -> form.loginPage("/login").permitAll())

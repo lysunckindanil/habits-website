@@ -40,7 +40,9 @@
             <tr th:each="image: ${images}">
                 <td><a th:href="@{/images/{id} (id = ${image})}" th:text="${image}">Name</a></td>
                 <td>
-                    <form th:method="post" th:action="@{/images/{image}/delete (image = ${image})}">
+                    <form th:method="post" th:action="@{/images/delete}">
+                        <label for="image" hidden="hidden">image</label>
+                        <input name="image" th:value="${image}" hidden="hidden" id="image">
                         <button class="btn btn-danger" type="submit">Delete</button>
                     </form>
                 </td>

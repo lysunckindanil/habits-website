@@ -21,14 +21,14 @@ public class AdminController {
     private final ImageService imageService;
     private final UserService userService;
 
-    // tasks
+    // everything secured (/admin)
+
     @GetMapping()
     public String categories(Model model) {
         model.addAttribute("categories", categoryService.getCategoriesList());
         return "admin/categories";
     }
 
-    // tasks
     @GetMapping("/tasks")
     public String tasks(Model model) {
         model.addAttribute("tasks", taskService.getTaskList());
