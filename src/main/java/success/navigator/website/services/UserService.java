@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import success.navigator.website.entities.Role;
-import success.navigator.website.entities.Task;
 import success.navigator.website.entities.User;
 import success.navigator.website.repositories.RoleRepository;
 import success.navigator.website.repositories.UserRepository;
@@ -27,19 +26,12 @@ public class UserService implements UserDetailsService {
     private final RoleRepository roleRepository;
 
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("user '%s' not found", username));
-        }
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
-    }
-
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public void addUserToDatabase(User user) {
@@ -49,8 +41,8 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void deleteUserFromDatabase(User user) {
-        userRepository.delete(user);
+    public void deleteUserFromDatabase(Long id) {
+        userRepository.deleteById(id);
     }
 
     // user points
@@ -58,6 +50,18 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUsername(username);
         user.setPoints(user.getPoints() + points);
         userRepository.save(user);
+    }
+
+    // related to spring security
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("user '%s' not found", username));
+        }
+
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {

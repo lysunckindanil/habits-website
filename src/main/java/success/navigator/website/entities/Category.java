@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -24,4 +25,5 @@ public class Category implements Comparable<Category> {
     public int compareTo(Category o) {
         return this.categoryOrder - o.categoryOrder;
     }
+
 }

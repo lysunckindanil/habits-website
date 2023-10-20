@@ -19,7 +19,6 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final TaskService taskService;
 
-
     @GetMapping("/add")
     private String addCategoryForm(Model model) {
         model.addAttribute("category", new Category());
@@ -35,6 +34,44 @@ public class CategoryController {
         }
         category.setTasks(tasks);
         categoryService.add(category);
-        return "redirect:/tasks";
+        return "redirect:/admin";
+    }
+
+    @GetMapping("/{id}/edit")
+    private String editCategoryForm(@PathVariable Long id, Model model) {
+        model.addAttribute("category", categoryService.getCategoryById(id));
+        model.addAttribute("tasks", categoryService.getFreeTaskList());
+        return "categories/edit";
+    }
+
+    @PostMapping("/{id}/edit")
+    private String editCategoryPost(@ModelAttribute Category category) {
+        Category original_category = categoryService.getCategoryById(category.getId());
+        original_category.setId(category.getId());
+        original_category.setName(category.getName());
+        original_category.setDescription(category.getDescription());
+        original_category.setCategoryOrder(category.getCategoryOrder());
+        categoryService.add(original_category);
+        return "redirect:/categories/" + category.getId() + "/edit";
+    }
+
+    @PostMapping("/{id}/delete")
+    private String deleteById(@PathVariable Long id) {
+        categoryService.deleteById(id);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/{category}/{task}/delete")
+    public String deleteTaskInCategoryById(@PathVariable("category") Long categoryId, @PathVariable("task") Long taskId) {
+        categoryService.deleteTaskInCategoryById(categoryId, taskId);
+        return "redirect:/categories/" + categoryId + "/edit";
+    }
+
+    @PostMapping("/{id}/add")
+    public String addTaskToCategory(@PathVariable Long id, @RequestParam("task") String[] tasks_ids) {
+        for (String taskId : tasks_ids) {
+            categoryService.addTaskInCategoryById(id, Long.parseLong(taskId));
+        }
+        return "redirect:/categories/" + id + "/edit";
     }
 }

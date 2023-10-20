@@ -1,6 +1,7 @@
 package success.navigator.website.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +11,13 @@ import success.navigator.website.services.CategoryService;
 import success.navigator.website.services.TaskService;
 import success.navigator.website.services.UserService;
 
+import java.beans.Transient;
 import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/tasks")
+@Slf4j
 public class TaskController {
 
     private final TaskService taskService;
@@ -75,4 +78,12 @@ public class TaskController {
         return "redirect:/tasks";
     }
 
+    @PostMapping("/{id}/count")
+    private String addPointsToUser(@PathVariable Long id, Principal principal) {
+        userService.addPointsToUser(principal.getName(), taskService.getTaskById(id).getPoints());
+        return "redirect:/tasks";
+    }
+
 }
+
+

@@ -19,9 +19,9 @@ public class MainController {
 
     @GetMapping()
     public String index(Model model, Principal principal) {
-        if (principal == null) return "index";
+        if (principal == null) return "home/index";
         model.addAttribute("user", userService.findByUsername(principal.getName()));
-        return "index-auth";
+        return "home/index-auth";
     }
 
     // registration
@@ -29,7 +29,7 @@ public class MainController {
     public String registerForm(Model model, Principal principal) {
         if (principal == null) {
             model.addAttribute("user", new User());
-            return "registration";
+            return "home/registration";
         }
         return "redirect:/";
     }
@@ -45,9 +45,8 @@ public class MainController {
     public String loginForm(Model model, Principal principal) {
         if (principal == null) {
             model.addAttribute("user", new User());
-            return "login";
+            return "home/login";
         }
         return "redirect:/";
     }
-
 }

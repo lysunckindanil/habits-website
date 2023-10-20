@@ -12,12 +12,12 @@ import java.util.List;
 public class TaskService {
     private final TaskRepository taskRepository;
 
-    public List<Task> getTaskList() {
-        return taskRepository.findAll();
+    public Task getTaskById(Long id) {
+        return taskRepository.findById(id).orElse(new Task());
     }
 
-    public Task getTaskById(Long id) {
-        return taskRepository.findById(id).orElse(null);
+    public List<Task> getTaskList() {
+        return taskRepository.findAll();
     }
 
     public void add(Task task) {
