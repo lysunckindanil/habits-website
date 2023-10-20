@@ -11,7 +11,6 @@ import success.navigator.website.services.CategoryService;
 import success.navigator.website.services.TaskService;
 import success.navigator.website.services.UserService;
 
-import java.beans.Transient;
 import java.security.Principal;
 
 @Controller

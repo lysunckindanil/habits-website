@@ -64,7 +64,7 @@ public class CategoryController {
     @PostMapping("/{category}/{task}/delete")
     public String deleteTaskInCategoryById(@PathVariable("category") Long categoryId, @PathVariable("task") Long taskId) {
         categoryService.deleteTaskInCategoryById(categoryId, taskId);
-        return "redirect:/categories/" + categoryId + "/edit";
+        return "redirect:/categories/%d/edit".formatted(categoryId);
     }
 
     @PostMapping("/{id}/add")
@@ -72,6 +72,6 @@ public class CategoryController {
         for (String taskId : tasks_ids) {
             categoryService.addTaskInCategoryById(id, Long.parseLong(taskId));
         }
-        return "redirect:/categories/" + id + "/edit";
+        return "redirect:/categories/%d/edit".formatted(id);
     }
 }
