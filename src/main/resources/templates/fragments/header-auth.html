@@ -1,31 +1,55 @@
-<nav th:fragment="header(username, points)" class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+<nav th:fragment="header(username)" class="navbar navbar-expand-lg navbar-dark bg-dark"
+     aria-label="Thirteenth navbar example">
     <div class="container">
         <a class="navbar-brand" href="/">MrSuccessCucumber228</a>
         <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
-                aria-label="Toggle navigation">
+                data-bs-target="#navbarsExample11"
+                aria-controls="navbarsExample11" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse" id="navbarCollapse" style="">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li><a th:href="@{/}" class="nav-link px-2 text-white">Home</a></li>
-                <li><a th:href="@{/tasks}" class="nav-link px-2 text-white">Game</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
+        <div class="navbar-collapse d-lg-flex collapse show" id="navbarsExample11" style="">
+            <a class="navbar-brand col-lg-0 me-0" href="/"></a>
+            <ul class="navbar-nav col-lg-9 justify-content-lg-center">
+                <li><a th:href="@{/}" class="nav-link px-2 text-white">Home</a></li>
+                <li><a th:href="@{/tasks}" class="nav-link px-2 text-white">Challenge</a></li>
+                <li><a th:href="@{/about}" class="nav-link px-2 text-white">About</a></li>
             </ul>
-            <form method="post" th:action="@{/logout}">
-                <button type="submit" class="btn btn-secondary" th:text="${username} +', ' + ${points} + ' points'">
-                    Profile
-                </button>
-            </form>
+            <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+                <form method="post" th:action="@{/logout}">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button id="username" th:text="${username}" type="button" class="btn btn-secondary">
+                            username
+                        </button>
+                        <button type="button" class="btn btn-danger"
+                                data-bs-toggle="modal" data-bs-target="#logout_modal">
+                            Log out
+                        </button>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="logout_modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Logout</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to log out?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">Log out</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+
 </nav>

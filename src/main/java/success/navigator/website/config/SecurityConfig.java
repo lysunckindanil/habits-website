@@ -24,17 +24,18 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers(
                         // admin
-                        "/admin",
+                        "/admin/**",
                         // categories
-                        "/categories",
+                        "/categories/**",
                         // tasks
                         "/tasks/add", "/tasks/*/edit", "/tasks/*/delete",
                         // images
                         "/images/add", "/images/delete"
                 ).hasRole("ADMIN"))
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/tasks").hasRole("USER"))
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .httpBasic(withDefaults())
-                .formLogin(form -> form.loginPage("/login").permitAll())
+                .formLogin(form -> form.loginPage("/login").successForwardUrl("/login_success").failureForwardUrl("/login_failure").permitAll())
                 .logout(form -> form.logoutUrl("/logout").logoutSuccessUrl("/").permitAll());
         return http.build();
     }

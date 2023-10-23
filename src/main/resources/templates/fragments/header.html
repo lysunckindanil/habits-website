@@ -1,34 +1,175 @@
-<nav th:fragment="header" class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+<!--suppress ThymeleafVariablesResolveInspection -->
+<nav th:fragment="header(user)" class="navbar navbar-expand-lg navbar-dark bg-dark"
+     aria-label="Thirteenth navbar example">
     <div class="container">
+        <script>
+            function signup() {
+                clear_validation();
+                const username = document.getElementById("username_reg").value;
+                const password = document.getElementById("password_reg").value;
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    url: '/register',
+                    headers: {
+                        'X-CSRF-TOKEN': $("meta[name='_csrf']").attr("content")
+                    },
+                    data: JSON.stringify({
+                        "username": username,
+                        "password": password
+                    }),
+                    success: function (json) {
+                        clear_validation();
+                        if (json.response === "failure") {
+                            const validation = document.getElementById("register_validation_" + json.target);
+                            validation.textContent = json.message;
+                            validation.style.display = "block";
+
+                        } else if (json.response === "success") {
+                            const success_validation = document.getElementById("register_validation_success");
+                            success_validation.textContent = json.message;
+                            success_validation.style.display = "block";
+                        }
+                    }
+                });
+            }
+
+            function login() {
+                clear_validation();
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+                const validation = document.getElementById("login_validation_username");
+                $.ajax({
+                    type: "POST",
+                    url: '/login',
+                    headers: {
+                        'X-CSRF-TOKEN': $("meta[name='_csrf']").attr("content")
+                    },
+                    data: jQuery.param({
+                        "username": username,
+                        "password": password
+                    }),
+                    credentials: 'include',
+                    success: function (data) {
+                        if (data.response === "success") {
+                            window.location.replace(window.location.href);
+                        } else if (data.response === "failure") {
+                            validation.textContent = data.message;
+                            validation.style.display = "block";
+                        }
+                    }
+                });
+
+            }
+
+            function clear_validation() {
+                document.getElementById("login_validation_username").style.display = "none";
+                document.getElementById("register_validation_username").style.display = "none";
+                document.getElementById("register_validation_password").style.display = "none";
+                document.getElementById("register_validation_success").style.display = "none";
+            }
+        </script>
+
         <a class="navbar-brand" href="/">MrSuccessCucumber228</a>
         <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
-                aria-label="Toggle navigation">
+                data-bs-target="#navbarsExample11"
+                aria-controls="navbarsExample11" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse" id="navbarCollapse" style="">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+
+        <div class="navbar-collapse d-lg-flex collapse show" id="navbarsExample11" style="">
+            <a class="navbar-brand col-lg-0 me-0" href="/"></a>
+            <ul class="navbar-nav col-lg-9 justify-content-lg-center">
                 <li><a th:href="@{/}" class="nav-link px-2 text-white">Home</a></li>
                 <li>
                     <a tabindex="0" role="button" data-bs-toggle="popover"
                        data-bs-trigger="focus" data-bs-title="Here's a little problem("
-                       data-bs-content="Here's some amazing content, but you should be signed in!"
-                       class="nav-link px-2">Game
+                       data-bs-content="Here's some amazing content, but you should be signed up!"
+                       class="nav-link px-2">Challenge
                     </a>
                 </li>
-                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
+                <li><a th:href="@{/about}" class="nav-link px-2 text-white">About</a></li>
             </ul>
-            <a href="/login" type="button" class="btn btn-outline-light me-2">Login</a>
-            <a href="/register" type="button" class="btn btn-warning">Sign-up</a>
+            <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+                <button type="button" class="btn btn-outline-light me-2" data-bs-toggle="modal"
+                        data-bs-target="#loginModal">
+                    Log in
+                </button>
+                <button onclick="clear_validation()" type="button" class="btn btn-warning me-2" data-bs-toggle="modal"
+                        data-bs-target="#registerModal">
+                    Sign up
+                </button>
+            </div>
         </div>
     </div>
+
+    <!-- login modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="loginModalLabel">Login</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <p id="login_validation_username" style="color: red; display: none"></p>
+                    <div class="form-group mb-3">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                               placeholder="Enter username" required>
+                    </div>
+
+
+                    <div class="form-group mb-3">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                               placeholder="Enter password" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button onclick="login()" type="button" class="btn btn-primary">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--    registration modal-->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="registerModalLabel">Registration</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="register_validation_success" style="color: green; display: none"></p>
+                    <div class="form-group mb-3">
+                        <label for="username_reg">Username</label>
+                        <input type="text" class="form-control" id="username_reg"
+                               placeholder="Enter username" required>
+                        <p id="register_validation_username" style="color: red; display: none"></p>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="password_reg">Password</label>
+                        <input type="password" class="form-control" id="password_reg"
+                               placeholder="Enter password" required>
+                        <p id="register_validation_password" style="color: red; display: none"></p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="signup()" class="btn btn-primary">Sign up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </nav>

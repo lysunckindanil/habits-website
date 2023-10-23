@@ -23,8 +23,7 @@
             </thead>
             <tbody>
             <tr th:each="category: ${categories}">
-                <td><a th:href="@{/categories/{id} (id = ${category.getId()})}" th:text="${category.getId()}">ID</a>
-                </td>
+                <td th:text="${category.getId()}">ID</td>
                 <td th:text="${category.getName()}">Name</td>
                 <td th:text="${category.getDescription()}">Description</td>
                 <td th:text="${category.getCategoryOrder()}">Order</td>

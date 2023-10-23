@@ -6,6 +6,7 @@ import success.navigator.website.entities.Category;
 import success.navigator.website.entities.Task;
 import success.navigator.website.repositories.CategoryRepository;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,9 @@ public class CategoryService {
     }
 
     public List<Category> getCategoriesList() {
-        return categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAll();
+        categories.forEach(x -> x.getTasks().sort(Comparator.comparingInt(Task::getPoints)));
+        return categories;
     }
 
     public void add(Category category) {

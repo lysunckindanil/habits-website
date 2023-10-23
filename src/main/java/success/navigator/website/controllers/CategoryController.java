@@ -10,6 +10,7 @@ import success.navigator.website.services.CategoryService;
 import success.navigator.website.services.TaskService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -28,12 +29,14 @@ public class CategoryController {
     }
 
     @PostMapping("/add")
-    private String addCategoryPost(@ModelAttribute Category category, @RequestParam("task") String[] tasks_ids) {
-        List<Task> tasks = new ArrayList<>();
-        for (String task_id : tasks_ids) {
-            tasks.add(taskService.getTaskById(Long.parseLong(task_id)));
+    private String addCategoryPost(@ModelAttribute Category category, @RequestParam(value = "task", required = false) String[] tasks_ids) {
+        if (tasks_ids != null) {
+            List<Task> tasks = new ArrayList<>();
+            for (String task_id : tasks_ids) {
+                tasks.add(taskService.getTaskById(Long.parseLong(task_id)));
+            }
+            category.setTasks(tasks);
         }
-        category.setTasks(tasks);
         categoryService.add(category);
         return "redirect:/admin";
     }
@@ -69,9 +72,13 @@ public class CategoryController {
     }
 
     @PostMapping("/{id}/add")
-    public String addTaskToCategory(@PathVariable Long id, @RequestParam("task") String[] tasks_ids) {
-        for (String taskId : tasks_ids) {
-            categoryService.addTaskInCategoryById(id, Long.parseLong(taskId));
+    public String addTaskToCategory(@PathVariable Long id, @RequestParam(value = "task", required = false) String[] tasks_ids) {
+        System.out.println(Arrays.toString(tasks_ids));
+        System.out.println(id);
+        if (tasks_ids != null) {
+            for (String taskId : tasks_ids) {
+                categoryService.addTaskInCategoryById(id, Long.parseLong(taskId));
+            }
         }
         return "redirect:/categories/%d/edit".formatted(id);
     }

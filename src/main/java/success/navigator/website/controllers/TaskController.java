@@ -12,6 +12,7 @@ import success.navigator.website.services.TaskService;
 import success.navigator.website.services.UserService;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,19 +27,15 @@ public class TaskController {
     // secured (/tasks/add, /tasks/*/edit, /tasks/*/delete)
     @GetMapping()
     private String index(Model model, Principal principal) {
-        if (principal != null) {
-            User user = userService.findByUsername(principal.getName());
-            model.addAttribute("categories", categoryService.getCategoriesList().stream().sorted().toList());
-            model.addAttribute("user", user);
-            model.addAttribute("isAdmin", user.getRoles().stream().anyMatch(x -> x.getName().equals("ROLE_ADMIN")));
-            return "tasks/index-auth";
-        }
+        User user = userService.findByUsername(principal.getName());
+        model.addAttribute("categories", categoryService.getCategoriesList().stream().sorted().toList());
+        model.addAttribute("user", user);
+        model.addAttribute("isAdmin", user.getRoles().stream().anyMatch(x -> x.getName().equals("ROLE_ADMIN")));
         return "tasks/index";
     }
 
     @GetMapping("/add")
     private String addTaskForm(Model model) {
-
         model.addAttribute("task", new Task());
         return "tasks/new";
     }
@@ -46,7 +43,7 @@ public class TaskController {
     @PostMapping("/add")
     private String addTaskPost(@ModelAttribute Task task) {
         taskService.add(task);
-        return "redirect:/tasks";
+        return "redirect:/admin/tasks";
     }
 
     @GetMapping("/{id}/edit")
@@ -69,21 +66,23 @@ public class TaskController {
             original_task.setPoints(task.getPoints());
             taskService.add(original_task);
         }
-        return "redirect:/tasks";
+        return "redirect:/admin/tasks";
     }
 
     @PostMapping("/{id}/delete")
     private String deleteTask(@PathVariable Long id) {
         taskService.deleteTaskById(id);
-        return "redirect:/tasks";
+        return "redirect:/admin/tasks";
     }
 
     @PostMapping("/count")
-    private String addPointsToUser(@RequestParam("task_id") Long id, Principal principal) {
-        userService.addPointsToUser(principal.getName(), taskService.getTaskById(id).getPoints());
-        return "redirect:/tasks";
+    @ResponseBody
+    private Map<String, String> addPointsToUser(@RequestBody Map<String, String> request, Principal principal) {
+        if (request.containsKey("points")) {
+            userService.addPointsToUser(principal.getName(), Integer.valueOf(request.get("points")));
+            return request;
+        }
+        return null;
     }
-
 }
-
 

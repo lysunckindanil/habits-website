@@ -29,4 +29,16 @@ public class WebConfig implements WebMvcConfigurer {
         templateResolver.setCheckExistence(true);
         return templateResolver;
     }
+
+//    @Bean
+//    public ConfigurableServletWebServerFactory webServerFactory() {
+//        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
+//        factory.addConnectorCustomizers(new TomcatConnectorCustomizer() {
+//            @Override
+//            public void customize(Connector connector) {
+//                connector.setProperty("relaxedQueryChars", "|{}[]");
+//            }
+//        });
+//        return factory;
+//    }
 }
