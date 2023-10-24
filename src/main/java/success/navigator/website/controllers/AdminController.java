@@ -21,8 +21,6 @@ public class AdminController {
     private final ImageService imageService;
     private final UserService userService;
 
-    // everything secured (/admin)
-
     @GetMapping()
     public String categories(Model model) {
         model.addAttribute("categories", categoryService.getCategoriesList());

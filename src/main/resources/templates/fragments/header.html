@@ -2,9 +2,13 @@
 <nav th:fragment="header(user)" class="navbar navbar-expand-lg navbar-dark bg-dark"
      aria-label="Thirteenth navbar example">
     <div class="container">
+        <script
+                src="https://code.jquery.com/jquery-3.6.3.js"
+                integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+                crossorigin="anonymous">
+        </script>
         <script>
             function signup() {
-                clear_validation();
                 const username = document.getElementById("username_reg").value;
                 const password = document.getElementById("password_reg").value;
                 $.ajax({
@@ -36,7 +40,6 @@
             }
 
             function login() {
-                clear_validation();
                 const username = document.getElementById("username").value;
                 const password = document.getElementById("password").value;
                 const validation = document.getElementById("login_validation_username");
@@ -92,7 +95,8 @@
                 <li><a th:href="@{/about}" class="nav-link px-2 text-white">About</a></li>
             </ul>
             <div class="d-lg-flex col-lg-3 justify-content-lg-end">
-                <button type="button" class="btn btn-outline-light me-2" data-bs-toggle="modal"
+                <button onclick="clear_validation()" type="button" class="btn btn-outline-light me-2"
+                        data-bs-toggle="modal"
                         data-bs-target="#loginModal">
                     Log in
                 </button>

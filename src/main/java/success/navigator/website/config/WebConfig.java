@@ -14,7 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
-                .addResourceLocations("file:/opt/navigator/")
+                .addResourceLocations("file:/opt/habits_website/")
                 .setCachePeriod(3600)
                 .resourceChain(true)
                 .addResolver(new EncodedResourceResolver());
@@ -23,22 +23,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
-        templateResolver.setPrefix("file:/opt/navigator/templates/");
+        templateResolver.setPrefix("file:/opt/habits_website/templates/");
         templateResolver.setSuffix(".html");
         templateResolver.setCacheable(false);
         templateResolver.setCheckExistence(true);
         return templateResolver;
     }
-
-//    @Bean
-//    public ConfigurableServletWebServerFactory webServerFactory() {
-//        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
-//        factory.addConnectorCustomizers(new TomcatConnectorCustomizer() {
-//            @Override
-//            public void customize(Connector connector) {
-//                connector.setProperty("relaxedQueryChars", "|{}[]");
-//            }
-//        });
-//        return factory;
-//    }
 }

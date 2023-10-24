@@ -14,9 +14,7 @@ import success.navigator.website.entities.User;
 import success.navigator.website.repositories.RoleRepository;
 import success.navigator.website.repositories.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,11 +32,33 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public void addUserToDatabase(User user) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setRoles(new ArrayList<>(List.of(roleRepository.getByName("ROLE_USER"))));
-        userRepository.save(user);
+    public Map<String, String> registerUser(User user) {
+
+        String username = user.getUsername();
+        String password = user.getPassword();
+        int str_max = 20;
+        int str_min = 5;
+        Map<String, String> response = new HashMap<>();
+        response.put("response", "failure");
+
+        if (userRepository.existsByUsername(username)) {
+            response.put("target", "username");
+            response.put("message", "Sorry, username %s already exists!".formatted(username));
+        } else if (username.length() < str_min || username.length() > str_max) {
+            response.put("target", "username");
+            response.put("message", "Username should be between %d and %d characters!".formatted(str_min, str_max));
+        } else if (password.length() < str_min || password.length() > str_max) {
+            response.put("target", "password");
+            response.put("message", "Password should be between %d and %d characters!".formatted(str_min, str_max));
+        } else {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            user.setPassword(encoder.encode(user.getPassword()));
+            user.setRoles(new ArrayList<>(List.of(roleRepository.getByName("ROLE_USER"))));
+            userRepository.save(user);
+            response.put("response", "success");
+            response.put("message", "You was successfully registered. Now you can log in to your account!");
+        }
+        return response;
     }
 
     public void deleteUserFromDatabase(Long id) {

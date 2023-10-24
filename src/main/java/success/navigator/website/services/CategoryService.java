@@ -1,6 +1,7 @@
 package success.navigator.website.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import success.navigator.website.entities.Category;
 import success.navigator.website.entities.Task;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final TaskService taskService;
@@ -36,7 +38,6 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
-
     // related to tasks
     public List<Task> getFreeTaskList() {
         Set<Task> usedTasks = new HashSet<>(categoryRepository.findAll().stream().flatMap(x -> x.getTasks().stream()).toList());
@@ -48,6 +49,8 @@ public class CategoryService {
             Category category = categoryRepository.findById(categoryId).get();
             category.getTasks().removeIf(x -> x.getId() == taskId);
             categoryRepository.save(category);
+        } else {
+            log.error("Category doesn't exist by id");
         }
     }
 
@@ -58,7 +61,11 @@ public class CategoryService {
             if (task != null) {
                 category.getTasks().add(task);
                 categoryRepository.save(category);
+            } else {
+                log.error("Task doesn't exist by id");
             }
+        } else {
+            log.error("Category doesn't exist by id");
         }
     }
 

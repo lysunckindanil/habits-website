@@ -1,4 +1,4 @@
-package success.navigator.website.controllers;
+package success.navigator.website.controllers.game;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,7 +10,6 @@ import success.navigator.website.services.CategoryService;
 import success.navigator.website.services.TaskService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -20,7 +19,7 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final TaskService taskService;
 
-    // everything secured (/categories)
+    // everything secured (/categories/**)
     @GetMapping("/add")
     private String addCategoryForm(Model model) {
         model.addAttribute("category", new Category());
@@ -73,8 +72,6 @@ public class CategoryController {
 
     @PostMapping("/{id}/add")
     public String addTaskToCategory(@PathVariable Long id, @RequestParam(value = "task", required = false) String[] tasks_ids) {
-        System.out.println(Arrays.toString(tasks_ids));
-        System.out.println(id);
         if (tasks_ids != null) {
             for (String taskId : tasks_ids) {
                 categoryService.addTaskInCategoryById(id, Long.parseLong(taskId));
