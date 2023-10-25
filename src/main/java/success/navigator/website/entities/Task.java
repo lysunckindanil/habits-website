@@ -13,11 +13,8 @@ public class Task {
     private long Id;
     private String name;
     private String description;
+    @Column(length = 1024)
     private String image;
     private Integer points;
-
-    public Object[] getDummyList() {
-        return new Object[this.points];
-    }
 
 }
