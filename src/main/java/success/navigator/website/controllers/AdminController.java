@@ -3,10 +3,8 @@ package success.navigator.website.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import success.navigator.website.entities.User;
 import success.navigator.website.services.CategoryService;
 import success.navigator.website.services.ImageService;
 import success.navigator.website.services.TaskService;
@@ -40,7 +38,7 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public String users(Model model) {
+    public String users(Model model, @ModelAttribute User user) {
         model.addAttribute("users", userService.getAllUsers());
         return "admin/users";
     }
@@ -48,6 +46,18 @@ public class AdminController {
     @PostMapping("/users/delete")
     public String deleteUser(@RequestParam("id") Long id) {
         userService.deleteUserFromDatabase(id);
+        return "redirect:/admin/users";
+    }
+
+    @PostMapping("/users/grant")
+    public String grantAdmin(@RequestParam(name = "username") String username){
+        userService.grantAdminRoleToUser(username);
+        return "redirect:/admin/users";
+    }
+
+    @PostMapping("/users/reduce")
+    public String reduceAdmin(@RequestParam(name = "username") String username){
+        userService.deleteAdminRoleToUser(username);
         return "redirect:/admin/users";
     }
 }

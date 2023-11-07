@@ -71,6 +71,18 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public void grantAdminRoleToUser(String username) {
+        User user = findByUsername(username);
+        user.getRoles().add(roleRepository.getByName("ROLE_ADMIN"));
+        userRepository.save(user);
+    }
+
+    public void deleteAdminRoleToUser(String username) {
+        User user = findByUsername(username);
+        user.getRoles().removeIf(x -> x.getName().equals("ROLE_ADMIN"));
+        userRepository.save(user);
+    }
+
     // related to spring security
     @Override
     @Transactional
@@ -86,4 +98,6 @@ public class UserService implements UserDetailsService {
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
     }
+
+
 }
