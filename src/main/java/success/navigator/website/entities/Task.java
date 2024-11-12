@@ -15,9 +15,4 @@ public class Task {
     private String description;
     private String image;
     private Integer points;
-
-    public Object[] getDummyList() {
-        return new Object[this.points];
-    }
-
 }

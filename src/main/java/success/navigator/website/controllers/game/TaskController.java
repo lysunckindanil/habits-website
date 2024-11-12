@@ -15,8 +15,8 @@ import success.navigator.website.services.TaskService;
 public class TaskController {
 
     private final TaskService taskService;
-    // secured everything ("/tasks/**")
 
+    // secured everything ("/tasks/**")
     @GetMapping("/add")
     private String addTaskForm(Model model) {
         model.addAttribute("task", new Task());
@@ -25,30 +25,19 @@ public class TaskController {
 
     @PostMapping("/add")
     private String addTaskPost(@ModelAttribute Task task) {
-        taskService.add(task);
+        taskService.save(task);
         return "redirect:/admin/tasks";
     }
 
     @GetMapping("/{id}/edit")
     private String editTaskForm(@PathVariable Long id, Model model) {
-        Task task = taskService.getTaskById(id);
-        if (task != null) {
-            model.addAttribute("task", taskService.getTaskById(id));
-            return "tasks/edit";
-        }
-        return "redirect:/";
+        model.addAttribute("task", taskService.getTaskById(id));
+        return "tasks/edit";
     }
 
     @PostMapping("/{id}/edit")
-    private String editTaskPost(@ModelAttribute Task task, @PathVariable Long id) {
-        Task original_task = taskService.getTaskById(id);
-        if (original_task != null) {
-            original_task.setName(task.getName());
-            original_task.setDescription(task.getDescription());
-            original_task.setImage(task.getImage());
-            original_task.setPoints(task.getPoints());
-            taskService.add(original_task);
-        }
+    private String editTaskPost(@ModelAttribute Task task) {
+        taskService.edit(task);
         return "redirect:/admin/tasks";
     }
 

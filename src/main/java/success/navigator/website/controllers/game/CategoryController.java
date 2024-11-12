@@ -5,12 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import success.navigator.website.entities.Category;
-import success.navigator.website.entities.Task;
 import success.navigator.website.services.CategoryService;
 import success.navigator.website.services.TaskService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/categories")
@@ -28,15 +24,11 @@ public class CategoryController {
     }
 
     @PostMapping("/add")
-    private String addCategoryPost(@ModelAttribute Category category, @RequestParam(value = "task", required = false) String[] tasks_ids) {
+    private String addCategoryPost(@ModelAttribute Category category, @RequestParam(value = "task", required = false) long[] tasks_ids) {
         if (tasks_ids != null) {
-            List<Task> tasks = new ArrayList<>();
-            for (String task_id : tasks_ids) {
-                tasks.add(taskService.getTaskById(Long.parseLong(task_id)));
-            }
-            category.setTasks(tasks);
+            categoryService.saveWithTasks(category, tasks_ids);
         }
-        categoryService.add(category);
+        categoryService.save(category);
         return "redirect:/admin";
     }
 
@@ -49,12 +41,7 @@ public class CategoryController {
 
     @PostMapping("/{id}/edit")
     private String editCategoryPost(@ModelAttribute Category category) {
-        Category original_category = categoryService.getCategoryById(category.getId());
-        original_category.setId(category.getId());
-        original_category.setName(category.getName());
-        original_category.setDescription(category.getDescription());
-        original_category.setCategoryOrder(category.getCategoryOrder());
-        categoryService.add(original_category);
+        categoryService.edit(category);
         return "redirect:/categories/%d/edit".formatted(category.getId());
     }
 
@@ -65,16 +52,16 @@ public class CategoryController {
     }
 
     @PostMapping("/{category}/{task}/delete")
-    public String deleteTaskInCategoryById(@PathVariable("category") Long categoryId, @PathVariable("task") Long taskId) {
-        categoryService.deleteTaskInCategoryById(categoryId, taskId);
+    public String deleteTaskToCategoryById(@PathVariable("category") long categoryId, @PathVariable("task") long taskId) {
+        categoryService.deleteTaskFromCategoryById(categoryId, taskId);
         return "redirect:/categories/%d/edit".formatted(categoryId);
     }
 
     @PostMapping("/{id}/add")
-    public String addTaskToCategory(@PathVariable Long id, @RequestParam(value = "task", required = false) String[] tasks_ids) {
+    public String addTaskToCategory(@PathVariable Long id, @RequestParam(value = "task", required = false) long[] tasks_ids) {
         if (tasks_ids != null) {
-            for (String taskId : tasks_ids) {
-                categoryService.addTaskInCategoryById(id, Long.parseLong(taskId));
+            for (long taskId : tasks_ids) {
+                categoryService.addTaskToCategoryById(id, taskId);
             }
         }
         return "redirect:/categories/%d/edit".formatted(id);
