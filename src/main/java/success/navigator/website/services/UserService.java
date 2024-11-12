@@ -33,7 +33,6 @@ public class UserService implements UserDetailsService {
     }
 
     public Map<String, String> registerUser(User user) {
-
         String username = user.getUsername();
         String password = user.getPassword();
         int str_max = 20;
@@ -41,7 +40,7 @@ public class UserService implements UserDetailsService {
         Map<String, String> response = new HashMap<>();
         response.put("response", "failure");
 
-        if (userRepository.existsByUsername(username)) {
+        if (userRepository.findByUsername(username) != null) {
             response.put("target", "username");
             response.put("message", "Sorry, username %s already exists!".formatted(username));
         } else if (username.length() < str_min || username.length() > str_max) {
@@ -72,6 +71,18 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public void grantAdminRoleToUser(String username) {
+        User user = findByUsername(username);
+        user.getRoles().add(roleRepository.getByName("ROLE_ADMIN"));
+        userRepository.save(user);
+    }
+
+    public void deleteAdminRoleToUser(String username) {
+        User user = findByUsername(username);
+        user.getRoles().removeIf(x -> x.getName().equals("ROLE_ADMIN"));
+        userRepository.save(user);
+    }
+
     // related to spring security
     @Override
     @Transactional
@@ -87,4 +98,6 @@ public class UserService implements UserDetailsService {
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
     }
+
+
 }
