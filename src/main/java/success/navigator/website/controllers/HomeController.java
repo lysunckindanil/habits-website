@@ -29,17 +29,6 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/about")
-    public String about(Model model, Principal principal) {
-        if (principal == null) {
-            model.addAttribute("user", new User());
-        } else {
-            model.addAttribute("user", userService.findByUsername(principal.getName()));
-        }
-        model.addAttribute("principal", principal);
-        return "about";
-    }
-
     @GetMapping("/challenge")
     private String challenge(Model model, Principal principal) {
         User user = userService.findByUsername(principal.getName());
