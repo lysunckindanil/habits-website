@@ -1,0 +1,16 @@
+a {
+	text-decoration: none;
+}
+
+.card {
+	transition: transform 80ms;
+}
+
+.card:active {
+	transform: scale(1.03);
+}
+
+.points_counter {
+	color: red;
+	font-size: 35px;
+}

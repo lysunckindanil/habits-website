@@ -1,0 +1,23 @@
+.custom_p, .custom_a {
+    font-size: 20px;
+    color: #374151;
+}
+
+img {
+    width: 100%;
+    display: block;
+    margin: 20px auto 40px;
+}
+
+.custom_h1 {
+    margin-top: 40px;
+}
+
+.custom_h2 {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+a.card {
+    text-decoration: none;
+}
